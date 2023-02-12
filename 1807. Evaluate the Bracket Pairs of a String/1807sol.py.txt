@@ -1,0 +1,22 @@
+class Solution:
+    def evaluate(self, s: str, knowledge: List[List[str]]) -> str:
+        
+        know = defaultdict(lambda:'?')
+        for k, v in knowledge: know[k] = v
+        ans = ""
+        isKey = False
+        for i in range(len(s)):
+            if s[i] == '(':
+                isKey = True
+                key = ""
+            elif s[i] == ')':
+                value = know[key]
+                ans += value
+                isKey = False
+                        
+            else:
+                if isKey:
+                    key += s[i]
+                else:
+                    ans += s[i]
+        return ans

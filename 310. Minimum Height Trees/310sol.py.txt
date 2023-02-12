@@ -1,0 +1,49 @@
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n == 2:
+            return edges[0]
+
+        _map = {}
+        for i in range(n):
+            _map[i] = []
+
+        countList = [0 for i in range(n)]
+
+        for e1, e2 in edges:
+            countList[e1] += 1
+            countList[e2] += 1
+
+            lst1 = _map[e1]
+            lst1.append(e2)
+            _map[e1] = lst1
+            
+            lst2 = _map[e2]
+            lst2.append(e1)
+            _map[e2] = lst2
+
+        def getHeight(tgt, parent):
+            child = _map[tgt]
+            maxH = 0
+            for c in child:
+                if c == parent:
+                    continue
+                else:
+                    h = getHeight(c, tgt) + 1
+                    maxH = max(h, maxH)
+            return maxH
+
+        minH = n
+        ans = []
+        for root in range(n):
+            if countList[root] == 1:
+                continue
+            h = getHeight(root, -1)
+            if h < minH:
+                ans = [root]
+                minH = h
+            elif h == minH:
+                ans.append(root)
+            else:
+                continue
+
+        return ans
